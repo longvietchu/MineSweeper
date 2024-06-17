@@ -16,15 +16,15 @@ class BoardTest {
         assertNotNull(this.board);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                assertNotNull(this.board.getCell(i, j));
+                assertNotNull(this.board.getSquare(i, j));
             }
         }
     }
 
     @Test
     public void testRevealCell() {
-        this.board.revealCell(0, 0);
-        assertTrue(this.board.getCell(0, 0).isRevealed());
+        this.board.revealSquare(0, 0);
+        assertTrue(this.board.getSquare(0, 0).isRevealed());
     }
 
     @Test
@@ -34,9 +34,9 @@ class BoardTest {
     }
 
     @Test
-    void testGetCell() {
-        Cell cell = this.board.getCell(2, 3);
-        assertNotNull(cell);
+    void testGetSquare() {
+        Square square = this.board.getSquare(2, 3);
+        assertNotNull(square);
     }
 
     @Test
@@ -54,6 +54,6 @@ class BoardTest {
     @Test
     void testIsMineAt() {
         boolean isMineAtResult = this.board.isMineAt(0, 0);
-        assertEquals(this.board.getCell(0, 0).isMine(), isMineAtResult);
+        assertEquals(this.board.getSquare(0, 0).isMine(), isMineAtResult);
     }
 }

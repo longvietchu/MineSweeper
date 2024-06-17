@@ -1,12 +1,19 @@
 import java.util.Scanner;
 
-public class GameInput {
+public class InputHandler {
     private final Scanner scanner;
 
-    public GameInput() {
+    public InputHandler() {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Prompts the user to input the size of the grid.
+     * The grid size must be between 3 and 10.
+     * Continues prompting until a valid size is entered.
+     *
+     * @return the size of the grid.
+     */
     public int inputGridSize() {
         while (true) {
             System.out.println("Enter the size of the grid (e.g. 4 for a 4x4 grid):");
@@ -28,6 +35,14 @@ public class GameInput {
         }
     }
 
+    /**
+     * Prompts the user to input the total number of mines to place on the grid.
+     * The number of mines must be between 1 and 35% of the total number of grid squares.
+     * Continues prompting until a valid number of mines is entered.
+     *
+     * @param gridSize the size of the grid.
+     * @return the total number of mines.
+     */
     public int inputTotalMines(int gridSize) {
         while (true) {
             System.out.println("Enter the number of mines to place on the grid (maximum is 35% of the total squares):");
@@ -50,27 +65,47 @@ public class GameInput {
         }
     }
 
-    public String selectSquare() {
+    /**
+     * Prompts the user to select a square to reveal.
+     * The input must be in the format "<char><int>", where the letter represents the row and the number represents the column.
+     * Continues prompting until a valid square is selected.
+     *
+     * @param gridSize the size of the grid.
+     * @return an array containing the row and column indices of the selected square.
+     */
+    public int[] selectSquare(int gridSize) {
         while (true) {
             System.out.print("Select a square to reveal (e.g., A1): ");
-            String square = scanner.next().toUpperCase();
-            if (square.length() != 2 ||
-                    !Character.isAlphabetic(square.charAt(0)) ||
-                    !Character.isDigit(square.charAt(1))) {
+            String input = scanner.next().toUpperCase();
+            if (input.length() != 2 ||
+                    !Character.isAlphabetic(input.charAt(0)) ||
+                    !Character.isDigit(input.charAt(1))) {
                 System.out.println("Incorrect input.");
+                continue;
+            }
+            int[] square = new int[2];
+            square[0] = input.charAt(0) - 'A';
+            square[1] = input.charAt(1) - '0' - 1;
+            if (square[0] < 0 || square[0] >= gridSize ||
+                    square[1] < 0 || square[1] >= gridSize) {
+                System.out.println("Invalid square.");
                 continue;
             }
             return square;
         }
     }
 
-    public String inputAnyKey() {
+    /**
+     * Prompts the user to input whether they want to restart the game.
+     * Continues prompting until a valid input ("y" or "n") is entered.
+     *
+     * @return "y" if the user wants to restart, "n" otherwise.
+     */
+    public String inputRestartGame() {
         System.out.print("Want to play again? (y/n): ");
         while (true) {
             String input = scanner.next();
-            if (!input.equals("y") && !input.equals("n")) {
-                continue;
-            }
+            if (!input.equalsIgnoreCase("y") && !input.equalsIgnoreCase("n")) continue;
             return input;
         }
     }

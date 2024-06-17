@@ -4,9 +4,10 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameInputTest {
+public class InputHandlerTest {
 
     @BeforeEach
     public void setUp() {
@@ -19,8 +20,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int gridSize = gameInput.inputGridSize();
+        InputHandler inputHandler = new InputHandler();
+        int gridSize = inputHandler.inputGridSize();
         assertEquals(4, gridSize);
     }
 
@@ -30,8 +31,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int gridSize = gameInput.inputGridSize();
+        InputHandler inputHandler = new InputHandler();
+        int gridSize = inputHandler.inputGridSize();
         assertEquals(5, gridSize);
     }
 
@@ -41,8 +42,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int gridSize = gameInput.inputGridSize();
+        InputHandler inputHandler = new InputHandler();
+        int gridSize = inputHandler.inputGridSize();
         assertEquals(5, gridSize);
     }
 
@@ -52,8 +53,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int gridSize = gameInput.inputGridSize();
+        InputHandler inputHandler = new InputHandler();
+        int gridSize = inputHandler.inputGridSize();
         assertEquals(5, gridSize);
     }
 
@@ -63,8 +64,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int totalMines = gameInput.inputTotalMines(4); // Assuming a 4x4 grid
+        InputHandler inputHandler = new InputHandler();
+        int totalMines = inputHandler.inputTotalMines(4); // Assuming a 4x4 grid
         assertEquals(3, totalMines);
     }
 
@@ -74,8 +75,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int totalMines = gameInput.inputTotalMines(4); // Assuming a 4x4 grid
+        InputHandler inputHandler = new InputHandler();
+        int totalMines = inputHandler.inputTotalMines(4); // Assuming a 4x4 grid
         assertEquals(3, totalMines);
     }
 
@@ -85,8 +86,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int totalMines = gameInput.inputTotalMines(4); // Assuming a 4x4 grid
+        InputHandler inputHandler = new InputHandler();
+        int totalMines = inputHandler.inputTotalMines(4); // Assuming a 4x4 grid
         assertEquals(3, totalMines);
     }
 
@@ -96,8 +97,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        int gridSize = gameInput.inputTotalMines(4);
+        InputHandler inputHandler = new InputHandler();
+        int gridSize = inputHandler.inputTotalMines(4);
         assertEquals(5, gridSize);
     }
 
@@ -107,9 +108,10 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        String square = gameInput.selectSquare();
-        assertEquals("A1", square);
+        InputHandler inputHandler = new InputHandler();
+        int[] square = inputHandler.selectSquare(4);
+        int[] expectedSquare = {0, 0};
+        assertArrayEquals(expectedSquare, square);
     }
 
     @Test
@@ -118,9 +120,10 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        String square = gameInput.selectSquare();
-        assertEquals("A1", square);
+        InputHandler inputHandler = new InputHandler();
+        int[] square = inputHandler.selectSquare(4);
+        int[] expectedSquare = {0, 0};
+        assertArrayEquals(expectedSquare, square);
     }
 
     @Test
@@ -129,20 +132,46 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        String square = gameInput.selectSquare();
-        assertEquals("B1", square);
+        InputHandler inputHandler = new InputHandler();
+        int[] square = inputHandler.selectSquare(4);
+        int[] expectedSquare = {1, 0};
+        assertArrayEquals(expectedSquare, square);
     }
 
     @Test
     public void testSelectSquare_InputSecondCharIsNotDigit() {
-        String input = "C$\nC2\n";
+        String input = "CC\nC2\n";
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        String square = gameInput.selectSquare();
-        assertEquals("C2", square);
+        InputHandler inputHandler = new InputHandler();
+        int[] square = inputHandler.selectSquare(4);
+        int[] expectedSquare = {2, 1};
+        assertArrayEquals(expectedSquare, square);
+    }
+
+    @Test
+    public void testSelectSquare_InputRowGreaterThanGridSize() {
+        String input = "E1\nD1\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        InputHandler inputHandler = new InputHandler();
+        int[] square = inputHandler.selectSquare(4);
+        int[] expectedSquare = {3, 0};
+        assertArrayEquals(expectedSquare, square);
+    }
+
+    @Test
+    public void testSelectSquare_InputColGreaterThanGridSize() {
+        String input = "C6\nC2\n";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        InputHandler inputHandler = new InputHandler();
+        int[] square = inputHandler.selectSquare(4);
+        int[] expectedSquare = {2, 1};
+        assertArrayEquals(expectedSquare, square);
     }
 
     @Test
@@ -151,8 +180,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        String response = gameInput.inputAnyKey();
+        InputHandler inputHandler = new InputHandler();
+        String response = inputHandler.inputRestartGame();
         assertEquals("y", response);
     }
 
@@ -162,8 +191,8 @@ public class GameInputTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        GameInput gameInput = new GameInput();
-        String response = gameInput.inputAnyKey();
+        InputHandler inputHandler = new InputHandler();
+        String response = inputHandler.inputRestartGame();
         assertEquals("n", response);
     }
 }

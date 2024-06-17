@@ -1,98 +1,85 @@
 public class Game {
     private Board board;
     private boolean gameOver;
-    private final GameInput gameInput;
+    private int gridSize;
+    private final InputHandler inputHandler;
 
     public Game() {
-        this.gameInput = new GameInput();
+        this.inputHandler = new InputHandler();
     }
 
+    /**
+     * Entry point to manage the game.
+     * Sets up the game, manages the main game loop, and handles game restarts.
+     */
     public void start() {
         this.setup();
+        this.play();
+        this.restart();
+    }
+
+    /**
+     * Sets up the game by prompting the user for the grid size and the number of mines.
+     * Initializes the board and sets the game state.
+     */
+    private void setup() {
+        this.gridSize = this.inputHandler.inputGridSize();
+        int totalMines = this.inputHandler.inputTotalMines(this.gridSize);
+        this.gameOver = false;
+        this.board = new Board(this.gridSize, this.gridSize, totalMines);
+    }
+
+    /**
+     * Manages the main flow and rules of the game.
+     * Continuously prompts the user to select squares until the game is won or a mine is detonated.
+     */
+    private void play() {
         while (!this.gameOver) {
-            this.printBoard();
-            String input = this.gameInput.selectSquare();
-            int row = input.charAt(0) - 'A';
-            int col = input.charAt(1) - '0' - 1;
+            this.board.printBoard();
+            int[] square = this.inputHandler.selectSquare(this.gridSize);
+            int row = square[0];
+            int col = square[1];
             if (this.board.isMineAt(row, col)) {
                 this.gameOver = true;
                 System.out.println("Oh no, you detonated a mine! Game over.");
             } else {
-                this.board.revealCell(row, col);
-                System.out.println("This square contains " + this.board.getCell(row, col).getAdjacentMines() + " adjacent mines.\n");
+                this.board.revealSquare(row, col);
+                System.out.println("This square contains " + this.board.getSquare(row, col).getAdjacentMines() + " adjacent mines.\n");
                 if (this.isWin()) {
                     this.gameOver = true;
                     System.out.println("Congratulations, you have won the game!");
                 }
             }
         }
-        printBoard(true);
-        this.restart();
+        this.board.printBoard(true);
     }
 
-    private void setup() {
-        int gridSize = this.gameInput.inputGridSize();
-        int totalMines = this.gameInput.inputTotalMines(gridSize);
-        this.gameOver = false;
-        this.board = new Board(gridSize, gridSize, totalMines);
-    }
-
-    private void printBoard() {
-        printBoard(false);
-    }
-
-    private void printBoard(boolean revealAll) {
-        if (board.getIsBoardUpdated()) {
-            System.out.println("Here is your updated minefield:");
-        } else {
-            System.out.println("Here is your minefield:");
-        }
-
-        for (int c = 0; c < board.getCols() + 1; c++) {
-            if (c == 0) {
-                System.out.print("  ");
-            } else {
-                System.out.print(c + " ");
-            }
-        }
-        System.out.println();
-        for (int r = 0; r < board.getRows(); r++) {
-            System.out.print((char)('A' + r) + " ");
-            for (int c = 0; c < board.getCols(); c++) {
-                Cell cell = board.getCell(r, c);
-                if (revealAll || cell.isRevealed()) {
-                    if (cell.isMine()) {
-                        System.out.print("* ");
-                    } else {
-                        System.out.print(cell.getAdjacentMines() + " ");
-                    }
-                } else {
-                    System.out.print("_ ");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    private boolean isWin() {
-        for (int r = 0; r < board.getRows(); r++) {
-            for (int c = 0; c < board.getCols(); c++) {
-                Cell cell = board.getCell(r, c);
-                if (!cell.isMine() && !cell.isRevealed()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
+    /**
+     * Prompts the user to restart or end the game.
+     * Restarts the game if the user chooses to continue, otherwise exits the game.
+     */
     private void restart() {
-        String input = this.gameInput.inputAnyKey();
-        if (input.equals("y")) {
+        String input = this.inputHandler.inputRestartGame();
+        if (input.equalsIgnoreCase("y")) {
             this.start();
         } else {
             System.out.println("Bye bye!!!");
         }
+    }
+
+    /**
+     * Checks if the game has been won.
+     * The game is won if all non-mine squares have been revealed.
+     *
+     * @return {@code true} if the game has been won, otherwise {@code false}.
+     */
+    protected boolean isWin() {
+        for (int r = 0; r < board.getRows(); r++) {
+            for (int c = 0; c < board.getCols(); c++) {
+                Square square = board.getSquare(r, c);
+                if (!square.isMine() && !square.isRevealed()) return false;
+            }
+        }
+        return true;
     }
 }

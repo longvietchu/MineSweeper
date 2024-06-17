@@ -13,27 +13,42 @@ Welcome to the Minesweeper CLI Game! This project is a console-based implementat
 - **Interactive Gameplay**: Select squares to reveal and see the number of adjacent mines.
 - **Game Over and Win Conditions**: The game ends when a mine is detonated or all safe squares are revealed.
 
+## Project Structure
+
+- **`src/main/java`**: Contains the main code for the game.
+    - `Main.java`: Entry point of the project to init and run the game.
+    - `Game.java`: Main game logic.
+    - `Board.java`: Manages the game board and cells.
+    - `Square.java`: Represents each square on the board.
+    - `InputHandler.java`: Handles user input.
+
+- **`src/test/java`**: Contains unit tests.
+    - `BoardTest.java`: Tests for the Board class.
+    - `SquareTest.java`: Tests for the Square class.
+    - `InputHandlerTest.java`: Tests for the InputHandler class.
+
 ## Getting Started
 
 ### Prerequisites
 
 - **Java 8 or higher**
+- **Maven 4**
 
 ### Installation
 
-1. **Clone the Repository**:
+1. **Go to the project**:
 
    ```bash
    cd MineSweeper
    ```
 
-2. **Compile the Code**:
+2. **Compile the code**:
 
    ```bash
    javac -d bin src/*.java
    ```
 
-3. **Run the Game**:
+3. **Run the game**:
 
    ```bash
    java -cp bin Game
@@ -41,7 +56,7 @@ Welcome to the Minesweeper CLI Game! This project is a console-based implementat
 
 ## Usage
 
-1. **Start the Game**: The game will prompt you to enter the grid size (e.g., 4 for a 4x4 grid) and the number of mines.
+1. **Start the game**: The game will prompt you to enter the grid size (e.g., 4 for a 4x4 grid) and the number of mines.
 2. **Gameplay**:
    - Enter the square you want to reveal in the format `A1`.
    - The game will show the number of adjacent mines for each revealed square.
@@ -59,21 +74,6 @@ The project uses JUnit 5 and Mockito for unit testing. To run the tests, ensure 
 mvn test
 ```
 
-## Project Structure
-
-- **`src/main/java`**: Contains the main code for the game.
-   - `Main.java`: Entry point of the project to init and run the game.
-   - `Game.java`: Main game logic.
-   - `Board.java`: Manages the game board and cells.
-   - `Cell.java`: Represents each cell on the board.
-   - `GameInput.java`: Handles user input.
-
-- **`src/test/java`**: Contains unit tests.
-   - `BoardTest.java`: Tests for the Board class.
-   - `CellTest.java`: Tests for the Cell class.
-   - `GameInputTest.java`: Tests for the GameInput class.
-
 ## Acknowledgements
 
-- **JUnit 5**: For testing framework.
-- **Mockito**: For mocking dependencies in tests.
+- **JUnit 5**: For unit testing framework.
